@@ -11,12 +11,13 @@ public class PasswordChecker : BaseChecker
             if (!string.IsNullOrEmpty(person.Password) && person.Password.Length > 6)
             {
                 Console.WriteLine("Password is valid");
-                Next.Check(request);
+                Next?.Check(request);
+            }
+            else
+            {
+                Console.WriteLine("Password is invalid...");
             }
         }
-        else
-        {
-            Console.WriteLine("Password is invalid...");
-        }
+        
     }
 }

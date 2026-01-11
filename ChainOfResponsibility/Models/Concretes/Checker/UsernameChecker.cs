@@ -11,7 +11,7 @@ public class UsernameChecker : BaseChecker
             if (!string.IsNullOrEmpty(person.Username) && person.Username.Length > 6)
             {
                 Console.WriteLine("Username is valid");
-                Next.Check(request);
+                Next?.Check(request);
             }
             else
             {

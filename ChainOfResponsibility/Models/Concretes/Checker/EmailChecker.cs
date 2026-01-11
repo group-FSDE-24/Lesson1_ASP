@@ -11,12 +11,13 @@ public class EmailChecker : BaseChecker
             if (!string.IsNullOrEmpty(person.Email) && person.Email.Contains('@'))
             {
                 Console.WriteLine("Email is valid");
-                Next.Check(request);
+                Next?.Check(request);
+            }
+            else
+            {
+                Console.WriteLine("Email is invalid...");
             }
         }
-        else
-        {
-            Console.WriteLine("Email is invalid...");
-        }
+       
     }
 }
