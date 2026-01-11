@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 
 namespace MyFirstApp.Helper;
 
@@ -58,19 +59,26 @@ public class WebHost
 
             var fileName = "../../../Views/" + requestPath;
 
-            if(File.Exists(fileName))
+            if (File.Exists(fileName))
             {
                 response.StatusCode = 200;
 
+                response.ContentType = GetContentType(requestPath);
 
+                var bytes = File.ReadAllBytes(fileName);
 
-
-
-
+                response.OutputStream.Write(bytes);
             }
             else
             {
+                string notFound = Path.Combine("../../../Views", "NotFound.html");
+                response.StatusCode = 404;
 
+                // TODO: Bura baxilacaq
+                response.ContentType = GetContentType(requestPath);
+
+                var bytes = File.ReadAllBytes(notFound);
+                response.OutputStream.Write(bytes, 0, bytes.Length);
             }
 
 
@@ -78,17 +86,59 @@ public class WebHost
         }
         catch (Exception ex)
         {
-
+            response.StatusCode = 500;
+            response.OutputStream.Write(Encoding.UTF8.GetBytes(ex.Message));
         }
         finally
         {
-
+            response.Close();
         }
 
+    }
 
+    private string GetContentType(string path)
+    {
+        string contentType = "text/html";
 
+        switch (Path.GetExtension(path).ToLower())
+        {
+            case ".css":
+                contentType = "text/css";
+                break;
 
+            case ".js":
+                contentType = "text/javascript";
+                break;
 
+            // Şəkillər
+            case ".png":
+                contentType = "image/png";
+                break;
+
+            case ".jpg":
+            case ".jpeg":
+                contentType = "image/jpeg";
+                break;
+
+            case ".gif":
+                contentType = "image/gif";
+                break;
+
+            case ".svg":
+                contentType = "image/svg+xml";
+                break;
+
+            case ".webp":
+                contentType = "image/webp";
+                break;
+
+            // PDF
+            case ".pdf":
+                contentType = "application/pdf";
+                break;
+        }
+
+        return contentType;
     }
 
 
